@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お問い合わせ｜赤ちゃんの名前ジェネレーター</title>
+<meta name="robots" content="noindex">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3985655020038392" crossorigin="anonymous"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BF42ZG1HYZ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BF42ZG1HYZ');</script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#f9f5f0; color:#3d2b1f; font-family:'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif; min-height:100vh; }
+.wrap { max-width:600px; margin:0 auto; padding:48px 20px 80px; }
+.back { display:inline-block; color:#b09a8c; font-size:13px; text-decoration:none; margin-bottom:32px; transition:color 0.15s; }
+.back:hover { color:#d4849a; }
+h1 { font-size:24px; color:#d4849a; margin-bottom:8px; }
+.sub { font-size:13px; color:#b09a8c; margin-bottom:36px; line-height:1.8; }
+.form-card { background:#fff; border:1px solid #ede0d8; border-radius:20px; padding:32px 28px; box-shadow:0 2px 16px rgba(61,43,31,0.08); }
+.form-group { margin-bottom:22px; }
+label { display:block; font-size:13px; color:#7a6457; margin-bottom:8px; }
+label span { color:#e05555; margin-left:2px; }
+input, textarea, select {
+  width:100%; background:#fdf8f5; border:1.5px solid #ede0d8;
+  border-radius:10px; color:#3d2b1f; font-size:15px; padding:12px 16px;
+  font-family:inherit; outline:none; transition:border-color 0.2s;
+}
+input:focus, textarea:focus, select:focus { border-color:#d4849a; }
+input::placeholder, textarea::placeholder { color:#c0a898; }
+textarea { min-height:140px; resize:vertical; }
+.btn-submit {
+  width:100%; padding:15px; background:linear-gradient(135deg,#d4849a,#a068bf);
+  border:none; border-radius:50px; color:#fff; font-size:16px; font-weight:700;
+  font-family:inherit; letter-spacing:0.1em; cursor:pointer;
+  box-shadow:0 4px 20px rgba(212,132,154,0.35); transition:transform 0.15s, opacity 0.15s;
+}
+.btn-submit:hover { transform:translateY(-2px); opacity:0.9; }
+.note { font-size:12px; color:#b09a8c; margin-top:16px; text-align:center; line-height:1.8; }
+.thanks { display:none; text-align:center; padding:40px 0; }
+.thanks .icon { font-size:48px; margin-bottom:16px; }
+.thanks p { color:#7a6457; font-size:14px; line-height:1.9; }
+footer { text-align:center; padding:20px; color:#b09a8c; font-size:11px; }
+footer a { color:#b09a8c; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="./index.html" class="back">← 名前ジェネレーターに戻る</a>
+  <h1>🌸 お問い合わせ</h1>
+  <p class="sub">ご意見・ご要望・不具合のご報告など、お気軽にどうぞ。<br>通常2〜3営業日以内にご返信いたします。</p>
+
+  <div class="form-card">
+    <div id="form-wrap">
+      <form id="contact-form" action="https://formspree.io/f/XXXXXXXX" method="POST">
+        <div class="form-group">
+          <label>お名前 <span>*</span></label>
+          <input type="text" name="name" placeholder="山田 花子" required>
+        </div>
+        <div class="form-group">
+          <label>メールアドレス <span>*</span></label>
+          <input type="email" name="email" placeholder="example@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>お問い合わせ種別</label>
+          <select name="type">
+            <option value="request">名前の追加リクエスト</option>
+            <option value="bug">バグ・不具合の報告</option>
+            <option value="other">その他</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>メッセージ <span>*</span></label>
+          <textarea name="message" placeholder="お問い合わせ内容をご記入ください" required></textarea>
+        </div>
+        <button type="submit" class="btn-submit">送信する</button>
+        <p class="note">個人情報は返信目的のみに使用し、第三者に提供しません。</p>
+      </form>
+    </div>
+    <div class="thanks" id="thanks">
+      <div class="icon">🌸</div>
+      <p>お問い合わせありがとうございます。<br>内容を確認のうえ、折り返しご連絡いたします。</p>
+    </div>
+  </div>
+</div>
+<footer><a href="./privacy.html">プライバシーポリシー</a></footer>
+<script>
+document.getElementById('contact-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const form = e.target;
+  const data = new FormData(form);
+  try {
+    const res = await fetch(form.action, { method:'POST', body:data, headers:{'Accept':'application/json'} });
+    if (res.ok) {
+      document.getElementById('form-wrap').style.display = 'none';
+      document.getElementById('thanks').style.display = 'block';
+    }
+  } catch(err) {
+    alert('送信に失敗しました。時間をおいて再度お試しください。');
+  }
+});
+</script>
+</body>
+</html>
