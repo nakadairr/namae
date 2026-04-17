@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>OGP生成</title></head>
+<body style="background:#f9f0f4;display:flex;align-items:center;justify-content:center;flex-direction:column;min-height:100vh;margin:0">
+<canvas id="c" width="1200" height="630"></canvas>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = 1200, H = 630;
+
+// 背景グラデーション
+const bg = ctx.createLinearGradient(0, 0, W, H);
+bg.addColorStop(0, '#fff8f8');
+bg.addColorStop(0.5, '#fdf0f5');
+bg.addColorStop(1, '#f8f0ff');
+ctx.fillStyle = bg;
+ctx.fillRect(0, 0, W, H);
+
+// 右上グロー
+const glow1 = ctx.createRadialGradient(W*0.8, H*0.2, 0, W*0.8, H*0.2, 300);
+glow1.addColorStop(0, 'rgba(255, 182, 210, 0.35)');
+glow1.addColorStop(1, 'transparent');
+ctx.fillStyle = glow1;
+ctx.fillRect(0, 0, W, H);
+
+// 左下グロー
+const glow2 = ctx.createRadialGradient(W*0.15, H*0.8, 0, W*0.15, H*0.8, 260);
+glow2.addColorStop(0, 'rgba(200, 180, 255, 0.25)');
+glow2.addColorStop(1, 'transparent');
+ctx.fillStyle = glow2;
+ctx.fillRect(0, 0, W, H);
+
+// 桜の花びら装飾
+const petals = [
+  [80, 80, 28], [160, 40, 20], [1100, 60, 32], [1050, 130, 18],
+  [50, 520, 24], [120, 580, 18], [1130, 500, 28], [1080, 580, 20],
+  [600, 30, 16], [300, 600, 22], [900, 590, 18], [200, 300, 14],
+  [1000, 320, 16], [400, 50, 20], [800, 55, 14]
+];
+petals.forEach(([x, y, size]) => {
+  ctx.font = `${size}px serif`;
+  ctx.textAlign = 'center';
+  ctx.globalAlpha = 0.25 + Math.random() * 0.3;
+  ctx.fillText('🌸', x, y + size * 0.8);
+});
+ctx.globalAlpha = 1;
+
+// 枠線
+ctx.strokeStyle = 'rgba(212, 132, 154, 0.3)';
+ctx.lineWidth = 2;
+roundRect(ctx, 36, 36, W - 72, H - 72, 24);
+ctx.stroke();
+
+// 角の装飾
+const corner = (x, y, dx, dy) => {
+  ctx.beginPath();
+  ctx.moveTo(x + dx * 28, y);
+  ctx.lineTo(x, y);
+  ctx.lineTo(x, y + dy * 28);
+  ctx.strokeStyle = 'rgba(212,132,154,0.6)';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+};
+corner(36, 36, 1, 1);
+corner(W-36, 36, -1, 1);
+corner(36, H-36, 1, -1);
+corner(W-36, H-36, -1, -1);
+
+// 桜メインアイコン
+ctx.font = '100px serif';
+ctx.textAlign = 'center';
+ctx.globalAlpha = 1;
+ctx.fillText('🌸', W/2, 195);
+
+// タイトル
+const titleGrad = ctx.createLinearGradient(W/2 - 360, 0, W/2 + 360, 0);
+titleGrad.addColorStop(0, '#c0607a');
+titleGrad.addColorStop(0.4, '#d4849a');
+titleGrad.addColorStop(0.7, '#a068bf');
+titleGrad.addColorStop(1, '#c0607a');
+ctx.fillStyle = titleGrad;
+ctx.font = 'bold 68px "Hiragino Mincho ProN", "Yu Mincho", serif';
+ctx.shadowColor = 'rgba(212,132,154,0.3)';
+ctx.shadowBlur = 16;
+ctx.fillText('赤ちゃんの名前ジェネレーター', W/2, 316);
+ctx.shadowBlur = 0;
+
+// サブタイトル
+ctx.fillStyle = 'rgba(100, 60, 80, 0.55)';
+ctx.font = '26px "Hiragino Mincho ProN", "Yu Mincho", serif';
+ctx.fillText('季節・自然・万葉集からインスピレーション', W/2, 378);
+
+// 区切り
+ctx.beginPath();
+ctx.moveTo(W/2 - 160, 408);
+ctx.lineTo(W/2 - 20, 408);
+ctx.moveTo(W/2 + 20, 408);
+ctx.lineTo(W/2 + 160, 408);
+ctx.strokeStyle = 'rgba(212,132,154,0.35)';
+ctx.lineWidth = 1;
+ctx.stroke();
+ctx.font = '14px serif';
+ctx.fillStyle = 'rgba(212,132,154,0.6)';
+ctx.fillText('✦', W/2, 413);
+
+// URL
+ctx.fillStyle = 'rgba(160, 100, 140, 0.6)';
+ctx.font = '22px "Hiragino Kaku Gothic ProN", sans-serif';
+ctx.fillText('namae-compass.vercel.app', W/2, 458);
+
+// タグ
+const tags = ['女の子', '男の子', '70名以上収録', 'お気に入り保存'];
+const tagColors = [
+  ['rgba(255,200,220,0.6)', 'rgba(212,132,154,0.5)'],
+  ['rgba(200,220,255,0.6)', 'rgba(100,150,210,0.5)'],
+  ['rgba(200,240,210,0.6)', 'rgba(100,180,120,0.5)'],
+  ['rgba(230,210,255,0.6)', 'rgba(160,110,210,0.5)'],
+];
+const totalTagW = tags.length * 150 + (tags.length - 1) * 12;
+const tagStartX = (W - totalTagW) / 2;
+tags.forEach((tag, i) => {
+  const tx = tagStartX + i * 162;
+  ctx.fillStyle = tagColors[i][0];
+  roundRect(ctx, tx, 488, 150, 36, 18);
+  ctx.fill();
+  ctx.strokeStyle = tagColors[i][1];
+  ctx.lineWidth = 1;
+  roundRect(ctx, tx, 488, 150, 36, 18);
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(60, 30, 50, 0.7)';
+  ctx.font = '16px "Hiragino Kaku Gothic ProN", sans-serif';
+  ctx.fillText(tag, tx + 75, 511);
+});
+
+// 無料バッジ
+ctx.fillStyle = 'rgba(212,132,154,0.9)';
+roundRect(ctx, W/2 - 36, 548, 72, 26, 13);
+ctx.fill();
+ctx.fillStyle = '#fff';
+ctx.font = 'bold 14px sans-serif';
+ctx.fillText('無 料', W/2, 566);
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.lineTo(x+w-r, y);
+  ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+  ctx.lineTo(x+w, y+h-r);
+  ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+  ctx.lineTo(x+r, y+h);
+  ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+  ctx.lineTo(x, y+r);
+  ctx.quadraticCurveTo(x, y, x+r, y);
+  ctx.closePath();
+}
+
+// 自動ダウンロード
+setTimeout(() => {
+  const a = document.createElement('a');
+  a.download = 'ogp.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+  document.body.innerHTML += '<p style="color:#d4849a;text-align:center;font-family:sans-serif;margin-top:20px">✅ ogp.png をダウンロードしました！このファイルはプロジェクトフォルダに置いてpushしてください。</p>';
+}, 500);
+</script>
+</body>
+</html>
